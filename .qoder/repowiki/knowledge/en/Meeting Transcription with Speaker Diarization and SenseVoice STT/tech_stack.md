@@ -1,0 +1,1 @@
+PyAnnote.audio 4.0+ for speaker diarization; FunASR AutoModel with custom SenseVoiceSmall model (remote_code=./model.py); torchcodec >= 0.12 for FFmpeg 4–8 native support; FastAPI + uvicorn for HTTP server; uv package manager with pyproject.toml dependency resolution.

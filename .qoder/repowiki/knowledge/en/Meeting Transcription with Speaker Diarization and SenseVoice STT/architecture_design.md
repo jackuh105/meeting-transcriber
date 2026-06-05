@@ -1,0 +1,6 @@
+- Entry point is `transcribe.py`, which dispatches to two modes: in-process transcription pipeline (`run_transcription`) or HTTP server mode (`run_server`).
+- Core pipeline layers: audio conversion (`audio_utils.convert_to_wav` via ffmpeg) → speaker diarization (`diarizer.MeetingDiarizer` wrapping PyAnnote) → segment extraction (`audio_utils.prepare_audio_buffer`) → STT inference (`stt_engine.STTEngine` wrapping FunASR AutoModel) → output generation (`output_formats.save_outputs`).
+- Server mode (`server.py`) exposes OpenAI Whisper API-compatible endpoints (`POST /v1/audio/transcriptions`, legacy `POST /recognition`) backed by the same `STTEngine`.
+- `model.py` defines the custom `SenseVoiceSmall` model class (registered as `SenseVoiceEncoderSmall` encoder + `SenseVoiceSmall` model) used by FunASR's remote-code loading mechanism.
+- `utils/ctc_alignment.py` provides CTC forced-alignment for timestamp extraction, imported by `model.py` during inference with `output_timestamp=True`.
+- Dependency direction: high-level orchestration (`transcribe.py`) → domain services (`diarizer`, `stt_engine`, `audio_utils`, `output_formats`) → infrastructure (`server.py` FastAPI app, `model.py` neural network definitions).

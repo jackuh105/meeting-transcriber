@@ -1,0 +1,29 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: en-US
+branch: Q0DeR-MaG1C-BrAnCh-Fo2-NoN-GiT-Or-No-C0MmIt
+exported_at: "2026-06-05T04:20:04Z"
+modules:
+    "":
+        dir_name: Meeting Transcription with Speaker Diarization and SenseVoice STT
+        title: Meeting Transcription with Speaker Diarization and SenseVoice STT
+        scope:
+            - .gitignore
+            - README.md
+            - run.sh
+            - uv.lock
+            - pyproject.toml
+            - utils/
+            - audio_utils.py
+            - diarizer.py
+            - model.py
+            - output_formats.py
+            - server.py
+            - stt_engine.py
+            - transcribe.py
+            - .env
+            - .env.example
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []

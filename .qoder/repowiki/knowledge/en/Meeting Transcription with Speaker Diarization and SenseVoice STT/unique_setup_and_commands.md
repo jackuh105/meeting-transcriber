@@ -1,0 +1,3 @@
+- Requires HuggingFace token in `.env` (HF_TOKEN) for PyAnnote model access; user must accept terms on HuggingFace for pyannote/speaker-diarization-community-1.
+- Install via `uv sync`; run transcription with `uv run transcribe.py -i <audio_file>` or start server with `uv run transcribe.py --server --port 8100`.
+- Convenience launcher `run.sh` wraps `uv run "$@"` for shorter invocation.

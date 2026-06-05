@@ -1,0 +1,1 @@
+Provides automated meeting transcription combining PyAnnote speaker diarization with SenseVoice speech-to-text, outputting multi-format subtitle files.

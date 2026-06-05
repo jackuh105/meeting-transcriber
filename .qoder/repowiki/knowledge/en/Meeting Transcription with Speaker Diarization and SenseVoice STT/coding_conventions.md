@@ -1,0 +1,4 @@
+- Async-to-thread bridging: CPU-bound operations (audio buffer preparation, STT inference) are wrapped with `asyncio.to_thread()` to enable concurrent execution under an `asyncio.Semaphore`.
+- Graceful error handling with fallback text: transcription failures return placeholder strings like `[Transcribe Error]` or `[Audio Error]` rather than raising exceptions, ensuring pipeline continuity.
+- Dual audio decoding strategy: torchaudio/soundfile is attempted first for in-memory byte decoding, with ffmpeg subprocess as a fallback when decoding fails.
+- Consistent time formatting functions: SRT uses comma-separated milliseconds (`HH:MM:SS,mmm`) while VTT uses dot-separated (`HH:MM:SS.mmm`), implemented as paired helper functions across `output_formats.py` and `server.py`.
