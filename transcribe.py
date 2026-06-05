@@ -85,9 +85,7 @@ async def run_transcription(args: argparse.Namespace) -> None:
         model_dir=args.model_dir,
         device=args.device,
         language=args.language,
-        # PyAnnote already segmented the audio – disable SenseVoice's
-        # built-in VAD to avoid double-segmentation artefacts.
-        vad_model=None,
+        vad_model=args.vad_model,
         use_itn=args.use_itn,
         merge_vad=args.merge_vad,
         merge_length_s=args.merge_length_s,

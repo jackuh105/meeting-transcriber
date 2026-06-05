@@ -4,6 +4,7 @@ In-process SenseVoice STT engine.
 Wraps FunASR's AutoModel for direct (non-HTTP) transcription.
 """
 
+import gc
 import io
 import logging
 from pathlib import Path
@@ -38,8 +39,7 @@ class STTEngine:
         merge_length_s: int = 15,
     ):
         logger.info("Loading SenseVoice model (dir=%s, device=%s, vad=%s)...", model_dir, device, vad_model)
-        # When vad_model is None or empty, skip VAD entirely (useful for
-        # pre-segmented audio from a diarizer).
+        # When vad_model is None or empty, skip VAD entirely.
         init_kwargs: dict = dict(
             model=model_dir,
             trust_remote_code=True,
@@ -53,6 +53,7 @@ class STTEngine:
             init_kwargs["vad_model"] = vad_model
             init_kwargs["vad_kwargs"] = {"max_single_segment_time": vad_kwargs}
         self.model = AutoModel(**init_kwargs)
+        self._device = device
         self._is_funasr_nano = "Fun-ASR-Nano" in model_dir
         self.param_dict = {
             "language": language,
@@ -81,7 +82,9 @@ class STTEngine:
         Returns:
             {"text": "..."} with the post-processed transcript.
         """
+        rec_results = None
         try:
+            audio_array = None
             if isinstance(audio_input, str):
                 # File path – let FunASR handle loading
                 rec_results = self.model.generate(
@@ -89,12 +92,13 @@ class STTEngine:
                 )
             elif isinstance(audio_input, bytes):
                 audio_array = self._process_bytes(audio_input)
+                # Match reference server: pass numpy array without cache/batch_size
                 rec_results = self.model.generate(
-                    input=audio_array, cache={}, batch_size=1, is_final=True, **self.param_dict
+                    input=audio_array, is_final=True, **self.param_dict
                 )
             elif isinstance(audio_input, np.ndarray):
                 rec_results = self.model.generate(
-                    input=audio_input, cache={}, batch_size=1, is_final=True, **self.param_dict
+                    input=audio_input, is_final=True, **self.param_dict
                 )
             else:
                 raise TypeError(f"Unsupported audio_input type: {type(audio_input)}")
@@ -102,7 +106,17 @@ class STTEngine:
             logger.error("Transcription error: %s", exc)
             return {"text": "", "error": str(exc)}
 
-        return self._format_result(rec_results)
+        # Extract text before cleanup so rec_results can be freed
+        result = self._format_result(rec_results)
+
+        # Release intermediate arrays and flush MPS cache to prevent
+        # memory accumulation across consecutive generate() calls.
+        del rec_results, audio_array
+        gc.collect()
+        if self._device == "mps" and torch.backends.mps.is_available():
+            torch.mps.empty_cache()
+
+        return result
 
     # ------------------------------------------------------------------
     # Internal helpers
