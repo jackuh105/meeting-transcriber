@@ -4,7 +4,6 @@
 **Referenced Files in This Document**
 - [README.md](file://README.md)
 - [pyproject.toml](file://pyproject.toml)
-- [run.sh](file://run.sh)
 - [transcribe.py](file://transcribe.py)
 - [server.py](file://server.py)
 - [stt_engine.py](file://stt_engine.py)
@@ -14,6 +13,13 @@
 - [model.py](file://model.py)
 - [utils/ctc_alignment.py](file://utils/ctc_alignment.py)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated all CLI examples to use `uv run transcribe.py` consistently throughout the documentation
+- Modernized command patterns to reflect repository migration to uv package management
+- Enhanced examples to demonstrate the unified `uv run` approach for both transcription and server modes
+- Updated troubleshooting guidance to reflect current dependency management with uv
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -29,12 +35,14 @@
 
 ## Introduction
 This Quick Start Guide helps you get up and running with Meeting Transcriber quickly. You will learn:
-- How to transcribe audio/video files in-process with practical CLI commands
+- How to transcribe audio/video files in-process with practical CLI commands using `uv run`
 - How to configure languages and customize output formats
 - How to run the HTTP server compatible with OpenAI Whisper API
 - Where outputs are saved and how filenames are generated
 - Troubleshooting tips for common beginner issues
 - Performance guidance for CPU, MPS, and CUDA devices
+
+**Updated** All examples now use the modernized `uv run` command pattern for consistent execution across different environments.
 
 ## Project Structure
 The project is organized around a unified CLI entry point that supports two modes:
@@ -123,19 +131,42 @@ OF-->>U : "Files in output directory"
   - Transcribe each segment using SenseVoice
   - Save outputs in chosen formats
 
-Practical examples:
+**Updated** All examples now use the modernized `uv run` command pattern:
+
+Practical examples using `uv run`:
 - Basic transcription with device selection and model directory:
-  - See [README.md:44-60](file://README.md#L44-L60)
+  ```bash
+  uv run transcribe.py -i audio/meeting.mp4 --device mps --model_dir /path/to/sensevoice_model
+  ```
 - Language-specific transcription:
-  - See [README.md:48-54](file://README.md#L48-L54)
+  ```bash
+  uv run transcribe.py -i audio/meeting.mp4 \
+    --device mps \
+    --language yue \
+    --format srt,json \
+    --model_dir /path/to/sensevoice_model
+  ```
 - Custom output directory:
-  - See [README.md:55-60](file://README.md#L55-L60)
+  ```bash
+  uv run transcribe.py -i audio/meeting.mp4 \
+    --device mps \
+    --model_dir /path/to/sensevoice_model \
+    -o results/
+  ```
 
 Output directory and naming:
-- Default output directory: input audio directory’s “output” subfolder
+- Default output directory: input audio directory's "output" subfolder
 - Output files: base name from the input file plus format-specific extension
 - Example layout:
-  - See [README.md:62-72](file://README.md#L62-L72)
+  ```
+  audio/
+  ├── meeting.mp4              # Original audio
+  └── output/
+    ├── meeting.srt          # SRT subtitles
+    ├── meeting.vtt          # WebVTT subtitles
+    ├── meeting.txt          # Plain text (with timestamps)
+    └── meeting.json         # Structured JSON
+  ```
 
 CLI arguments (selected):
 - Device selection: cpu, mps, cuda
@@ -167,7 +198,9 @@ How it works internally:
 - Purpose: Expose a server endpoint compatible with OpenAI Whisper API for external tools
 - Endpoint: POST /v1/audio/transcriptions
 - Example startup and client call:
-  - See [README.md:74-89](file://README.md#L74-L89)
+  ```bash
+  uv run transcribe.py --server --port 8100 --device mps --model_dir /path/to/sensevoice_model
+  ```
 
 Server behavior:
 - Accepts multipart/form-data with an audio file and model parameter
@@ -265,12 +298,11 @@ Save --> End(["End"])
 Handle --> End
 ```
 
-[No sources needed since this diagram shows conceptual workflow, not actual code structure]
-
 ## Dependency Analysis
 - Python runtime and package manager: [pyproject.toml:1-24](file://pyproject.toml#L1-L24)
-- Convenience launcher: [run.sh:1-7](file://run.sh#L1-L7)
 - CLI entry point: [transcribe.py:228-240](file://transcribe.py#L228-L240)
+
+**Updated** The project now uses uv as the primary package manager with consistent `uv run` command patterns:
 
 ```mermaid
 graph LR
@@ -288,7 +320,6 @@ P --> D6["python-dotenv, python-multipart, tqdm, opencc-python-reimplemented"]
 
 **Section sources**
 - [pyproject.toml:1-24](file://pyproject.toml#L1-L24)
-- [run.sh:1-7](file://run.sh#L1-L7)
 - [transcribe.py:228-240](file://transcribe.py#L228-L240)
 
 ## Performance Considerations
@@ -342,29 +373,56 @@ Common beginner issues and resolutions:
 
 ## Conclusion
 You now have everything needed to start transcribing meetings quickly:
-- Use the in-process mode for immediate results with common audio formats
+- Use the in-process mode for immediate results with common audio formats using `uv run`
 - Switch to HTTP server mode for integration with external tools
 - Customize language and output formats to match your workflow
 - Follow the troubleshooting tips to resolve common issues
 - Adjust device and concurrency settings for optimal performance
 
+**Updated** All commands now use the modernized `uv run` pattern for consistent execution across different environments and package managers.
+
 ## Appendices
 
 ### Practical CLI Examples
+All examples use the modernized `uv run` command pattern:
+
 - Basic transcription with device and model directory:
-  - See [README.md:44-60](file://README.md#L44-L60)
+  ```bash
+  uv run transcribe.py -i audio/meeting.mp4 --device mps --model_dir /path/to/sensevoice_model
+  ```
 - Language-specific transcription:
-  - See [README.md:48-54](file://README.md#L48-L54)
+  ```bash
+  uv run transcribe.py -i audio/meeting.mp4 \
+    --device mps \
+    --language yue \
+    --format srt,json \
+    --model_dir /path/to/sensevoice_model
+  ```
 - Custom output directory:
-  - See [README.md:55-60](file://README.md#L55-L60)
+  ```bash
+  uv run transcribe.py -i audio/meeting.mp4 \
+    --device mps \
+    --model_dir /path/to/sensevoice_model \
+    -o results/
+  ```
 - Start HTTP server:
-  - See [README.md:76-89](file://README.md#L76-L89)
+  ```bash
+  uv run transcribe.py --server --port 8100 --device mps --model_dir /path/to/sensevoice_model
+  ```
 
 ### Output Directory and Naming
-- Default output directory: input audio directory’s “output” subfolder
+- Default output directory: input audio directory's "output" subfolder
 - Output files: base name from the input file plus format-specific extension
 - Example layout:
-  - See [README.md:62-72](file://README.md#L62-L72)
+  ```
+  audio/
+  ├── meeting.mp4              # Original audio
+  └── output/
+    ├── meeting.srt          # SRT subtitles
+    ├── meeting.vtt          # WebVTT subtitles
+    ├── meeting.txt          # Plain text (with timestamps)
+    └── meeting.json         # Structured JSON
+  ```
 
 ### HTTP Server Compatibility
 - Endpoint: POST /v1/audio/transcriptions

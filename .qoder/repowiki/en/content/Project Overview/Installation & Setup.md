@@ -4,14 +4,22 @@
 **Referenced Files in This Document**
 - [README.md](file://README.md)
 - [pyproject.toml](file://pyproject.toml)
-- [run.sh](file://run.sh)
 - [transcribe.py](file://transcribe.py)
 - [stt_engine.py](file://stt_engine.py)
 - [diarizer.py](file://diarizer.py)
 - [audio_utils.py](file://audio_utils.py)
 - [server.py](file://server.py)
 - [output_formats.py](file://output_formats.py)
+- [model.py](file://model.py)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Updated installation instructions to reflect removal of run.sh script and adoption of uv-based workflow
+- Revised step-by-step installation process to use uv sync and uv run commands
+- Updated verification steps to use uv run transcribe.py --help
+- Removed references to run.sh script throughout documentation
+- Enhanced Git-based workflow documentation
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -97,7 +105,6 @@ This should display the available command-line options and confirm all dependenc
 
 **Section sources**
 - [README.md:22-36](file://README.md#L22-L36)
-- [run.sh:1-7](file://run.sh#L1-L7)
 - [transcribe.py:230-240](file://transcribe.py#L230-L240)
 
 ## Platform-Specific Setup

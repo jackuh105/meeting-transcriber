@@ -4,7 +4,6 @@
 **Referenced Files in This Document**
 - [README.md](file://README.md)
 - [pyproject.toml](file://pyproject.toml)
-- [run.sh](file://run.sh)
 - [uv.lock](file://uv.lock)
 - [transcribe.py](file://transcribe.py)
 - [stt_engine.py](file://stt_engine.py)
@@ -14,6 +13,13 @@
 - [output_formats.py](file://output_formats.py)
 - [utils/ctc_alignment.py](file://utils/ctc_alignment.py)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Removed legacy run.sh script references and replaced with uv run commands
+- Updated development workflow to emphasize consistent uv run usage
+- Enhanced uv-based dependency management documentation
+- Updated build and deployment procedures to reflect Git-based workflow
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -33,6 +39,8 @@
 
 ## Introduction
 This document provides comprehensive development guidance for the meeting-transcriber project, covering code structure, conventions, contributing guidelines, testing strategies, and build/deployment processes. The project performs end-to-end meeting transcription with automatic speaker diarization and SenseVoice STT, supporting multiple output formats and both in-process and HTTP server modes.
+
+**Updated** Repository now uses Git-based workflow with uv package manager as the primary development tool, replacing legacy shell scripts with consistent uv run commands.
 
 ## Project Structure
 The project follows a modular layout centered around a unified CLI entry point with specialized modules for audio processing, speaker diarization, STT engine, and output generation.
@@ -311,7 +319,7 @@ The project follows a multi-layered testing approach:
 - GPU utilization tracking for CUDA-enabled systems
 
 ## Build and Deployment
-The project uses uv as the primary package manager with comprehensive dependency resolution.
+The project uses uv as the primary package manager with comprehensive dependency resolution, following a Git-based workflow.
 
 ### Installation Process
 1. Install Python 3.11+ and FFmpeg
@@ -324,10 +332,10 @@ The project uses uv as the primary package manager with comprehensive dependency
 # Install dependencies
 uv sync
 
-# Run transcription
+# Run transcription with uv run (recommended)
 uv run transcribe.py -i audio/meeting.mp4 --device mps
 
-# Start HTTP server
+# Start HTTP server with uv run (recommended)
 uv run transcribe.py --server --port 8100 --device mps
 ```
 
@@ -337,9 +345,10 @@ uv run transcribe.py --server --port 8100 --device mps
 - Test installation from clean environment
 - Verify all output formats and server endpoints
 
+**Updated** All commands now use uv run consistently, eliminating the need for legacy shell scripts. The development workflow emphasizes uv-based execution for reproducible environments.
+
 **Section sources**
 - [README.md:22-30](file://README.md#L22-L30)
-- [run.sh:1-7](file://run.sh#L1-L7)
 
 ## Development Environment Setup
 ### Prerequisites
@@ -358,6 +367,9 @@ uv run transcribe.py --server --port 8100 --device mps
 - Use `uv run` for consistent environment execution
 - Leverage `uv.lock` for reproducible builds
 - Test changes incrementally through the CLI interface
+- Follow Git-based workflow for version control
+
+**Updated** Development workflow now emphasizes uv-based execution and Git-based version control, replacing legacy shell script approaches with consistent uv run commands.
 
 **Section sources**
 - [README.md:14-21](file://README.md#L14-L21)
@@ -433,11 +445,14 @@ The project uses structured logging with INFO level as default:
 ## Conclusion
 The meeting-transcriber project demonstrates a well-architected solution for automated meeting transcription with robust error handling, flexible deployment options, and comprehensive output formats. The modular design enables easy maintenance and extension while the uv-based dependency management ensures reproducible builds across environments.
 
+**Updated** The project has migrated to a Git-based workflow with uv package manager as the primary development tool, eliminating legacy shell scripts in favor of consistent uv run commands. This change improves development reproducibility and simplifies the build process.
+
 Key strengths include:
 - Clean separation of concerns across audio processing, diarization, and STT components
 - Comprehensive HTTP server implementation with OpenAI-compatible API
 - Flexible output format generation supporting multiple use cases
 - Robust error handling and fallback mechanisms
 - Extensive configuration options for different deployment scenarios
+- Git-based workflow with uv package manager for reproducible environments
 
 The development guide provides the foundation for contributing to and extending this project while maintaining its reliability and performance characteristics.

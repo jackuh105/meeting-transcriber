@@ -6,8 +6,14 @@
 - [pyproject.toml](file://pyproject.toml)
 - [transcribe.py](file://transcribe.py)
 - [audio_utils.py](file://audio_utils.py)
-- [run.sh](file://run.sh)
 </cite>
+
+## Update Summary
+**Changes Made**
+- Removed references to run.sh script as it has been deprecated
+- Updated architecture diagrams to reflect current file structure without legacy convenience scripts
+- Updated installation commands to use uv run pattern instead of shell script execution
+- Revised step-by-step installation to align with current repository structure
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -111,6 +117,19 @@ The application uses FFmpeg for audio format conversion during transcription.
 **Section sources**
 - [audio_utils.py:32-43](file://audio_utils.py#L32-L43)
 
+### 4. Run the Application Directly with uv
+Execute the transcriber directly using uv run pattern:
+
+```bash
+uv run transcribe.py -i audio/meeting.mp4 --device mps
+```
+
+This replaces the previous run.sh script approach and provides better dependency isolation.
+
+**Section sources**
+- [README.md:44-60](file://README.md#L44-L60)
+- [transcribe.py:6](file://transcribe.py#L6)
+
 ## Environment Variables and Configuration
 
 ### Required Environment Variable
@@ -148,9 +167,17 @@ Confirm your Python version meets the requirement.
 python --version
 ```
 
+### Verify Direct Execution
+Test direct uv run execution without legacy scripts.
+
+```bash
+uv run transcribe.py --help
+```
+
 **Section sources**
 - [README.md:16](file://README.md#L16)
 - [README.md:191-193](file://README.md#L191-L193)
+- [README.md:174-184](file://README.md#L174-L184)
 
 ## Common Installation Issues and Troubleshooting
 
@@ -194,6 +221,22 @@ Resolution:
 - [README.md:177-181](file://README.md#L177-L181)
 - [pyproject.toml:20](file://pyproject.toml#L20)
 
+### Legacy Script Removal
+**Updated** The run.sh script has been deprecated and removed from the repository. Users should now use the uv run pattern directly.
+
+Symptoms:
+- Command not found errors when trying to execute run.sh
+- Permission errors when attempting to run shell scripts
+
+Resolution:
+- Use `uv run transcribe.py` instead of `./run.sh`
+- Ensure uv is properly installed and configured
+- Execute commands directly from the project root directory
+
+**Section sources**
+- [README.md:146](file://README.md#L146)
+- [transcribe.py:6](file://transcribe.py#L6)
+
 ## Architecture Overview
 
 The installation and runtime architecture involves several components:
@@ -209,7 +252,6 @@ end
 subgraph "Project Files"
 TOML["pyproject.toml"]
 ENV[".env"]
-SH["run.sh"]
 CLI["transcribe.py"]
 UTIL["audio_utils.py"]
 end
@@ -218,7 +260,6 @@ UV --> CLI
 FF --> UTIL
 HF --> CLI
 ENV --> CLI
-SH --> CLI
 CLI --> UTIL
 CLI --> TOML
 ```
@@ -227,7 +268,6 @@ CLI --> TOML
 - [pyproject.toml:1-24](file://pyproject.toml#L1-L24)
 - [transcribe.py:15-37](file://transcribe.py#L15-L37)
 - [audio_utils.py:9-21](file://audio_utils.py#L9-L21)
-- [run.sh:1-7](file://run.sh#L1-L7)
 
 ## Conclusion
-Meeting Transcriber requires a modern Python environment, uv for dependency management, FFmpeg for audio processing, and a configured HuggingFace token for model access. By following the platform-specific installation steps, configuring environment variables, and verifying prerequisites, you can successfully deploy the system. The troubleshooting section addresses common issues related to FFmpeg availability, model access, and library compatibility.
+Meeting Transcriber requires a modern Python environment, uv for dependency management, FFmpeg for audio processing, and a configured HuggingFace token for model access. By following the platform-specific installation steps, configuring environment variables, and verifying prerequisites, you can successfully deploy the system. The troubleshooting section addresses common issues related to FFmpeg availability, model access, and library compatibility. Note that the legacy run.sh script has been removed and replaced with direct uv run execution for better dependency management and portability.
