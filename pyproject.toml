@@ -1,0 +1,23 @@
+[project]
+name = "meeting-transcriber"
+version = "0.1.0"
+description = "One-command meeting transcription with speaker diarization and SenseVoice STT"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "fastapi>=0.95.1",
+    "ffmpeg-python>=0.2.0",
+    "funasr>=1.0.5",
+    "modelscope>=1.11.1",
+    "opencc-python-reimplemented>=0.1.7",
+    "pyannote-audio>=4.0.2",
+    "python-dotenv>=1.2.1",
+    "python-multipart>=0.0.20",
+    "soundfile>=0.13.1",
+    "torch>=2.9.1",
+    "torchaudio>=2.9.1",
+    "torchcodec>=0.12",
+    "tqdm>=4.67.1",
+    "uvicorn>=0.38.0",
+]
